@@ -2,7 +2,7 @@ polygon-api-client
 fastapi
 uvicorn
 sqlalchemy
-psycog2-binary
+psycopg2-binary
 polygon-api-client
 python-dotenv
 hypercorn
