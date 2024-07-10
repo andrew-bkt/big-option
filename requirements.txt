@@ -5,3 +5,4 @@ sqlalchemy
 psycog2-binary
 polygon-api-client
 python-dotenv
+hypercorn

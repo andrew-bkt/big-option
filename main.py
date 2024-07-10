@@ -19,7 +19,6 @@ Base.metadata.create_all(bind=engine)
 def collect_and_store_data(request: OptionDataRequest):
     client = RESTClient(os.getenv("POLYGON_API_KEY"))
     db = next(get_db())
-
     try:
         for a in client.list_aggs(request.symbol, request.multiplier, request.timespan, request.from_date, request.to_date):
             option_data = {
