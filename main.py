@@ -10,6 +10,11 @@ from database import engine, get_db, Base
 from models import OptionData, OptionDataRequest, OptionDataResponse
 
 from fastapi.middleware.cors import CORSMiddleware
+
+load_dotenv()
+
+app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -18,9 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-load_dotenv()
 
-app = FastAPI()
 
 # Create tables
 Base.metadata.create_all(bind=engine)
