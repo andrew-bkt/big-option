@@ -17,13 +17,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:8501"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -37,7 +35,7 @@ def collect_and_store_data(request: OptionDataRequest):
                 'symbol': request.symbol,
                 'timestamp': datetime.fromtimestamp(a.timestamp / 1000),
                 'volume': a.volume,
-                'vwap': a.volume_weighted_average_price,
+                'vwap': a.vwap,  # Changed from volume_weighted_average_price to vwap
                 'open': a.open,
                 'close': a.close,
                 'high': a.high,
@@ -60,6 +58,7 @@ def collect_and_store_data(request: OptionDataRequest):
     finally:
         db.close()
 
+
 @app.post("/collect_data/")
 async def api_collect_data(request: OptionDataRequest, background_tasks: BackgroundTasks):
     background_tasks.add_task(collect_and_store_data, request)
@@ -76,6 +75,10 @@ async def get_option_data(symbol: str, start_date: str, end_date: str):
         return data
     finally:
         db.close()
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     import uvicorn
